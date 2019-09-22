@@ -32,10 +32,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Facebook">
-      <HintPath>..\..\..\..\..\..\..\קבצי הפעלה\DLLs\Facebook.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\Facebook.dll</HintPath>
     </Reference>
     <Reference Include="FbGraphApiWrapper">
-      <HintPath>..\..\..\..\..\..\..\קבצי הפעלה\DLLs\FbGraphApiWrapper.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\FbGraphApiWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="MyFacebookLogic">
+      <HintPath>..\..\..\..\Desktop\MyFacebookLogic.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,8 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="CorrectGuessObserver.cs" />
     <Compile Include="EventsProxy.cs" />
     <Compile Include="Facade.cs" />
+    <Compile Include="FullNameChecker.cs" />
     <Compile Include="GuessWho.cs" />
     <Compile Include="EventsCenter.cs" />
     <Compile Include="IEvent.cs" />
@@ -60,8 +65,11 @@
     <Compile Include="ImgBlur.cs" />
     <Compile Include="ImgGamma.cs" />
     <Compile Include="ImgTranparency.cs" />
+    <Compile Include="IStrategy.cs" />
+    <Compile Include="IObserver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="WrongGuessObserver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

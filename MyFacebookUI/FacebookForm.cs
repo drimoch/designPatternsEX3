@@ -12,7 +12,7 @@ namespace MyFacebookUI
 {
     public delegate Utilities.eGuessType NamePressed<T>(T i_NamePressed);
 
-    public delegate void HandleNamePressed<T>(T i_MessageToUser);
+   // public delegate void HandleNamePressed<T>(T i_MessageToUser);
 
     public partial class FacebookForm : Form
     {
@@ -31,9 +31,9 @@ namespace MyFacebookUI
 
         public event NamePressed<string> m_NameHandler;
 
-        public event HandleNamePressed<string> m_CorrectGuess;
+       // public event HandleNamePressed<string> m_CorrectGuess;
 
-        public event HandleNamePressed<string> m_WrongGuess;
+       // public event HandleNamePressed<string> m_WrongGuess;
 
         private void facebookForm_Load(object sender, EventArgs e)
         {
@@ -170,13 +170,13 @@ namespace MyFacebookUI
             }
         }
 
-        private void onGuess(string messageToUser, HandleNamePressed<string> i_Event)
-        {
-            if (i_Event != null)
-            {
-                i_Event.Invoke(messageToUser);
-            }
-        }
+        //private void onGuess(string i_MessageToUser, HandleNamePressed<string> i_Event)
+        //{
+        //    if (i_Event != null)
+        //    {
+        //        i_Event.Invoke(i_MessageToUser);
+        //    }
+        //}
 
         private void handleWrongGuess(string i_MessageToUser)
         {
@@ -250,13 +250,15 @@ namespace MyFacebookUI
             {
                 messageToUser = string.Format("Correct Guess!{0} Wanna play again?", Environment.NewLine);
 
-                onGuess(messageToUser, m_CorrectGuess);
+                m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.CORRECT);
+                //onGuess(messageToUser, m_CorrectGuess);
             }
             else
             {
                 messageToUser = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
+                m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.WRONG);
 
-                onGuess(messageToUser, m_WrongGuess);
+                // onGuess(messageToUser, m_WrongGuess);
             }
         }
 
@@ -430,8 +432,10 @@ namespace MyFacebookUI
         private void initializeDelegates()
         {
             m_NameHandler += m_AppLogicFacade.handleNamePressed;
-            m_CorrectGuess = handleCorrectGuess;
-            m_WrongGuess = handleWrongGuess;
+
+            m_AppLogicFacade.initDelegatesInGuessWho(handleCorrectGuess, handleWrongGuess);
+            //m_CorrectGuess = handleCorrectGuess;
+            //m_WrongGuess = handleWrongGuess;
         }
     }
 }

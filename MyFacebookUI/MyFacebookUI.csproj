@@ -37,10 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Facebook">
-      <HintPath>..\..\..\..\..\..\..\קבצי הפעלה\DLLs\Facebook.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\Facebook.dll</HintPath>
     </Reference>
     <Reference Include="FbGraphApiWrapper">
-      <HintPath>..\..\..\..\..\..\..\קבצי הפעלה\DLLs\FbGraphApiWrapper.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\FbGraphApiWrapper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

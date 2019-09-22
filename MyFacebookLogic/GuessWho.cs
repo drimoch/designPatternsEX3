@@ -15,6 +15,8 @@ namespace MyFacebookLogic
         private List<User> m_FriendsUserList;
         private User m_LoggedInUser;
         private User m_CurrentUserShown;
+        private CorrectGuessObserver m_CorrectGuessObserver;
+        private WrongGuessObserver m_WrongGuessObserver;
 
         public User CurrentUserShown
         {
@@ -35,6 +37,7 @@ namespace MyFacebookLogic
         {
             m_LoggedInUser = i_UserConnected;
             m_WrongGuessHandler += minusOneLive;
+
         }
 
         public int m_CounterLives
@@ -64,8 +67,10 @@ namespace MyFacebookLogic
 
         public Utilities.eGuessType handleNamePressed(string i_NamePressed)
         {
-            if ((!m_CurrentUserShown.Name.ToUpper().Equals(i_NamePressed.ToUpper())) ||
-                string.IsNullOrEmpty(i_NamePressed))
+            //IStrategy strategy = new FullNameChecker();
+            bool isConfirmed = isUserConfirmed(new FullNameChecker(), i_NamePressed);
+
+            if ((!isConfirmed) || (string.IsNullOrEmpty(i_NamePressed)))
             {
                 return Utilities.eGuessType.WRONG;
             }
@@ -73,6 +78,11 @@ namespace MyFacebookLogic
             {
                 return Utilities.eGuessType.CORRECT;
             }
+        }
+
+        private bool isUserConfirmed(IStrategy i_ConfirmStrategy, string i_NamePressed)
+        {
+            return i_ConfirmStrategy.userConfirm(m_CurrentUserShown, i_NamePressed);
         }
 
         public void OnWrongGuess()
@@ -87,6 +97,25 @@ namespace MyFacebookLogic
         {
             RandAFriend();
             m_CounterLives = (int)Utilities.Constants.LIVES_COUNT;
+        }
+
+        internal void initDelegatesInGuessWho(Action<string> i_HandleCorrectGuess, Action<string> i_HandleWrongGuess)
+        {
+            m_CorrectGuessObserver = new CorrectGuessObserver(i_HandleCorrectGuess);
+            m_WrongGuessObserver = new WrongGuessObserver(i_HandleWrongGuess);
+        }
+
+        internal void onGuess(string i_MessageToUser, Utilities.eGuessType i_UserGuess)
+        {
+            IObserver observerToInvoke;
+
+            //can't do this assignment with macro
+            if (i_UserGuess == Utilities.eGuessType.CORRECT)
+                observerToInvoke = m_CorrectGuessObserver;
+            else
+                observerToInvoke = m_WrongGuessObserver;
+
+            observerToInvoke.invoke(i_MessageToUser);
         }
     }
 }
