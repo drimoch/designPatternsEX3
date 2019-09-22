@@ -1,0 +1,10 @@
+==========================Exercise Checking Report==========================
+Exercise No...........: 2
+First Student Details.: 203785431 - David Rimoch
+Second Student Details: Sahar Hajbi - 308145853 
+Delivery Date.........: 1 - Sep - 2019 
+Delivered In Delay....: No
+Delay Reason..........: 
+Visual Studio Version.: 2017 
+Comments..............: 
+========================End Exercise Checking Report========================  
