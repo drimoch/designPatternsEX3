@@ -84,10 +84,7 @@ namespace MyFacebookLogic
                     }
                 }
             }
-            foreach (IEvent evnt in m_UserEvents)
-            {
-                
-            }
+         
 
             return eventDates;
         }
