@@ -108,7 +108,7 @@ namespace MyFacebookLogic
             m_FriendsBirthDates = new Dictionary<DateTime, List<string>>();
             m_EventsPerDates = new Dictionary<DateTime, List<IEvent>>();
             m_LoggedInUser = i_LoggedInUser;
-            m_UserEvents = new EventCollection((ICollection<IEvent>)(from evnt in i_LoggedInUser.Events select new EventProxy(evnt) as IEvent).ToList());
+            m_UserEvents = new EventCollection((from evnt in i_LoggedInUser.Events select new EventProxy(evnt) as IEvent).ToList());
         }
 
         public DateTime[] GetDatesToMark()

@@ -5,6 +5,7 @@ using System;
 
 namespace MyFacebookLogic
 {
+
     public class AppSettings
     {
         private static readonly string r_AppSettingsFilePath = AppDomain.CurrentDomain.BaseDirectory;
