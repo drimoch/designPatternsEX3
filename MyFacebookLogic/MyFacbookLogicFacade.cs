@@ -55,7 +55,7 @@ namespace MyFacebookLogic
             return friendsName;
         }
 
-        public ICollection<IEvent> GetEventsOnThatDate(DateTime i_dateToCheck)
+        public IEnumerable<IEvent> GetEventsOnThatDate(DateTime i_dateToCheck)
         {
             ICollection<EventProxy> eventsOnThatDate = new List<EventProxy>() ;
             ICollection<IEvent> eventsOnThatDateCollection = (from evnt in eventsOnThatDate select evnt as IEvent).ToList();
@@ -103,19 +103,46 @@ namespace MyFacebookLogic
             return m_GuessWho.CurrentUserShown;
         }
 
-        public Utilities.eGuessType handleNamePressed(string i_NamePressed)
-        {
-            return m_GuessWho.handleNamePressed(i_NamePressed);
-        }
+        //public Utilities.eGuessType handleNamePressed(string i_NamePressed)
+        //{
+        //    return m_GuessWho.handleNamePressed(i_NamePressed);
+        //}
 
-        public void initDelegatesInGuessWho(Action<string> i_HandleCorrectGuess, Action<string> i_HandleWrongGuess)
+        public void InitDelegates(Action<string> i_HandleCorrectGuess, Action<string> i_HandleWrongGuess)
         {
             m_GuessWho.initDelegatesInGuessWho(i_HandleCorrectGuess, i_HandleWrongGuess);
         }
 
-        public void onGuess(string i_MessageToUser, Utilities.eGuessType i_UserGuess)
+        public Utilities.eGuessType HandleNamePressed(string i_NamePressed)
         {
-            m_GuessWho.onGuess(i_MessageToUser, i_UserGuess);
+            if (m_GuessWho.IsUserConfirmed(new FirstNameStrategy(), i_NamePressed))
+            {
+                return Utilities.eGuessType.PARTIAL_FIRST_NAME;
+            }
+
+            if (m_GuessWho.IsUserConfirmed(new LastNameStrategy(), i_NamePressed))
+            {
+                return Utilities.eGuessType.PARTIAL_LAST_NAME;
+            }
+
+            if ((m_GuessWho.IsUserConfirmed(new FullNameStrategy(), i_NamePressed)
+                || (string.IsNullOrEmpty(i_NamePressed))))
+            {
+                return Utilities.eGuessType.WRONG;
+            }
+            else
+            {
+                return Utilities.eGuessType.CORRECT;
+            }
+        }
+
+        public void OnGuess(string i_NamePressed)
+        {
+            Utilities.eGuessType userGuess = HandleNamePressed(i_NamePressed);
+
+            string messageToUser = m_GuessWho.BuildMessageAccordingToUserGuess(userGuess);
+
+            m_GuessWho.onGuess(i_NamePressed, userGuess, messageToUser);
         }
     }
 }

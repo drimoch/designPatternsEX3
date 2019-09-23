@@ -7,7 +7,7 @@ using FacebookWrapper.ObjectModel;
 
 namespace MyFacebookLogic
 {
-    interface IStrategy
+    public interface IStrategy
     {
         bool userConfirm(User i_UserShown, string i_NamePressed);
     }
