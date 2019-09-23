@@ -8,9 +8,9 @@ namespace MyFacebookLogic
 {
     //public delegate void HandleNamePressed<T>(T i_MessageToUser);
 
-    class CorrectGuessObserver : IObserver
+    public class CorrectGuessObserver : IObserver
     {
-        public Action<string> m_CorrectGuess;
+        public Action<string> m_CorrectGuess { get; set; }
 
         public CorrectGuessObserver(Action<string> i_HandleCorrectGuess)
         {

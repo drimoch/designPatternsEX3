@@ -8,17 +8,19 @@ namespace MyFacebookLogic
 {
     public class WrongGuessObserver : IObserver
     {
-        private Action<string> m_WrongGuess;
+        public Action<string> m_WrongGuess { get; set; }
 
         public WrongGuessObserver(Action<string> i_HandleCorrectGuess)
         {
-            this.m_WrongGuess = i_HandleCorrectGuess;
+            this.m_WrongGuess += i_HandleCorrectGuess;
         }
 
         public void invoke(string i_Message)
         {
             if (m_WrongGuess != null)
+            {
                 m_WrongGuess.Invoke(i_Message);
+            }
         }
     }
 }
