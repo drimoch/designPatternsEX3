@@ -57,9 +57,10 @@ namespace MyFacebookLogic
 
         public ICollection<IEvent> GetEventsOnThatDate(DateTime i_dateToCheck)
         {
-            ICollection<IEvent> eventsOnThatDate = (ICollection<IEvent>)new List<EventProxy>();
-            m_EventsCenter.GetEventsOnThatDate(i_dateToCheck, ref eventsOnThatDate);
-            return eventsOnThatDate;
+            ICollection<EventProxy> eventsOnThatDate = new List<EventProxy>() ;
+            ICollection<IEvent> eventsOnThatDateCollection = (from evnt in eventsOnThatDate select evnt as IEvent).ToList();
+            m_EventsCenter.GetEventsOnThatDate(i_dateToCheck, ref eventsOnThatDateCollection);
+            return eventsOnThatDateCollection;
         }
 
         public bool isLastUserRemembered()

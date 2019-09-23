@@ -79,7 +79,7 @@ namespace MyFacebookLogic
                     eventDates.AddRange(GetDateRange(userEventsEumerator.Current.StartTime.Value, userEventsEumerator.Current.EndTime.Value));
                     while (curDate <= userEventsEumerator.Current.EndTime.Value)
                     {
-                        populateDictionary(userEventsEumerator.Current.Name, curDate, m_EventsPerDates);
+                        populateDictionary(userEventsEumerator.Current, curDate, m_EventsPerDates);
                         curDate = curDate.AddDays(1);
                     }
                 }
@@ -108,7 +108,7 @@ namespace MyFacebookLogic
             m_FriendsBirthDates = new Dictionary<DateTime, List<string>>();
             m_EventsPerDates = new Dictionary<DateTime, List<IEvent>>();
             m_LoggedInUser = i_LoggedInUser;
-            m_UserEvents = new EventCollection((ICollection<IEvent>)from evnt in i_LoggedInUser.Events select new EventProxy(evnt));
+            m_UserEvents = new EventCollection((ICollection<IEvent>)(from evnt in i_LoggedInUser.Events select new EventProxy(evnt) as IEvent).ToList());
         }
 
         public DateTime[] GetDatesToMark()

@@ -8,16 +8,16 @@ namespace MyFacebookLogic
 {
     public class EventCollection : IEnumerable
     {
-        private readonly ICollection<IEvent> r_FriendsCardCollection;
+        private readonly ICollection<IEvent> r_Events;
 
-        public EventCollection(ICollection<IEvent> i_FriendsCardCollection)
+        public EventCollection(ICollection<IEvent> i_events)
         {
-            r_FriendsCardCollection = i_FriendsCardCollection;
+            r_Events = i_events;
         }
 
         public IEnumerator<IEvent> GetEnumerator()
         {
-            foreach (IEvent evnt in r_FriendsCardCollection)
+            foreach (IEvent evnt in r_Events)
             {
                 yield return evnt;
             }
@@ -25,7 +25,7 @@ namespace MyFacebookLogic
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return r_FriendsCardCollection.GetEnumerator();
+            return r_Events.GetEnumerator();
         }
     }
 

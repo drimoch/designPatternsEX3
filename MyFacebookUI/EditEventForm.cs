@@ -19,24 +19,29 @@ namespace MyFacebookUI
 
         public EditEventForm(IEvent i_eventToEdit, Action done)
         {
-            InitializeComponent();
-            m_eventToEdit = i_eventToEdit;
-            DateTime[] startDate;
-            DateTime[] endDate;
-            doneEditing += done;
-            nameTextBox.Text = i_eventToEdit.Name;
-            locationTextBox.Text = i_eventToEdit.Location;
-            descriptionTextBox.Text = i_eventToEdit.Description;
-            if (i_eventToEdit.StartTime != null)
+            if (i_eventToEdit != null)
             {
-                startDate = new DateTime[] { Convert.ToDateTime(i_eventToEdit.StartTime) };
-                startMonthCalendar.BoldedDates = startDate;
-            }
 
-            if (i_eventToEdit.EndTime != null)
-            {
-                endDate = new DateTime[] { Convert.ToDateTime(i_eventToEdit.EndTime) };
-                endMonthCalender.BoldedDates = endDate;
+
+                InitializeComponent();
+                m_eventToEdit = i_eventToEdit;
+                DateTime[] startDate;
+                DateTime[] endDate;
+                doneEditing += done;
+                nameTextBox.Text = i_eventToEdit.Name;
+                locationTextBox.Text = i_eventToEdit.Location;
+                descriptionTextBox.Text = i_eventToEdit.Description;
+                if (i_eventToEdit.StartTime != null)
+                {
+                    startDate = new DateTime[] { Convert.ToDateTime(i_eventToEdit.StartTime) };
+                    startMonthCalendar.BoldedDates = startDate;
+                }
+
+                if (i_eventToEdit.EndTime != null)
+                {
+                    endDate = new DateTime[] { Convert.ToDateTime(i_eventToEdit.EndTime) };
+                    endMonthCalender.BoldedDates = endDate;
+                }
             }
         }
 
@@ -95,7 +100,7 @@ namespace MyFacebookUI
             return result;
         }
 
-       public enum eErrorType
+        public enum eErrorType
         {
             OK = 0,
             endSmallerThanStart = 1,
