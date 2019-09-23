@@ -55,7 +55,7 @@ namespace MyFacebookLogic
             return friendsName;
         }
 
-        public IEnumerable<IEvent> GetEventsOnThatDate(DateTime i_dateToCheck)
+        public ICollection<IEvent> GetEventsOnThatDate(DateTime i_dateToCheck)
         {
             ICollection<EventProxy> eventsOnThatDate = new List<EventProxy>() ;
             ICollection<IEvent> eventsOnThatDateCollection = (from evnt in eventsOnThatDate select evnt as IEvent).ToList();

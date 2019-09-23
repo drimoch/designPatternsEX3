@@ -255,7 +255,7 @@ namespace MyFacebookUI
             }
             EventsOnDateListBox.DisplayMember = "Name";
 
-            eventsThatDate = m_AppLogicFacade.GetEventsOnThatDate(e.Start);
+            eventsThatDate =new EventCollection( m_AppLogicFacade.GetEventsOnThatDate(e.Start));
             EventsOnDateListBox.DisplayMember = "Name";
             foreach (IEvent eventName in eventsThatDate)
             {
