@@ -55,9 +55,9 @@ namespace MyFacebookLogic
             return friendsName;
         }
 
-        public ICollection<IEvent> GetEventsOnThatDate(DateTime i_dateToCheck)
+        public IEnumerable<IEvent> GetEventsOnThatDate(DateTime i_dateToCheck)
         {
-            ICollection<IEvent> eventsOnThatDate = (ICollection<IEvent>)new List<EventProxy>();
+            IEnumerable<IEvent> eventsOnThatDate = new List<EventProxy>();
             m_EventsCenter.GetEventsOnThatDate(i_dateToCheck, ref eventsOnThatDate);
             return eventsOnThatDate;
         }
@@ -89,7 +89,7 @@ namespace MyFacebookLogic
 
         public int CounterLives()
         {
-            return m_GuessWho.m_CounterLives;
+        return m_GuessWho.m_CounterLives;
         }
 
         public void OnWrongGuess()
@@ -116,5 +116,5 @@ namespace MyFacebookLogic
         {
             m_GuessWho.onGuess(i_NamePressed);
         }
-    }
+    }      
 }
