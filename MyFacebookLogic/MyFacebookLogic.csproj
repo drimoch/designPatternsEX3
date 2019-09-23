@@ -56,7 +56,7 @@
     <Compile Include="Strategy\FirstNameStrategy.cs" />
     <Compile Include="Observer\CorrectGuessObserver.cs" />
     <Compile Include="EventsProxy.cs" />
-    <Compile Include="Facade.cs" />
+    <Compile Include="MyFacbookLogicFacade.cs" />
     <Compile Include="Strategy\FullNameStrategy.cs" />
     <Compile Include="GuessWho.cs" />
     <Compile Include="EventsCenter.cs" />

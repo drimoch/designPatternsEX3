@@ -65,30 +65,7 @@ namespace MyFacebookLogic
             m_CurrentUserShown = randomFriend;
         }
 
-        public Utilities.eGuessType handleNamePressed(string i_NamePressed)
-        {
-            bool isFirstNameConfirmed = isUserConfirmed(new FirstNameStrategy(), i_NamePressed);
-
-            if (isFirstNameConfirmed)
-                return Utilities.eGuessType.PARTIAL_FIRST_NAME;
-
-            bool isLastNameConfirmed = isUserConfirmed(new LastNameStrategy(), i_NamePressed);
-            if (isLastNameConfirmed)
-                return Utilities.eGuessType.PARTIAL_LAST_NAME;
-
-            bool isConfirmed = isUserConfirmed(new FullNameStrategy(), i_NamePressed);
-
-            if ((!isConfirmed) || (string.IsNullOrEmpty(i_NamePressed)))
-            {
-                return Utilities.eGuessType.WRONG;
-            }
-            else
-            {
-                return Utilities.eGuessType.CORRECT;
-            }
-        }
-
-        private bool isUserConfirmed(IStrategy i_ConfirmStrategy, string i_NamePressed)
+        public bool IsUserConfirmed(IStrategy i_ConfirmStrategy, string i_NamePressed)
         {
             return i_ConfirmStrategy.userConfirm(m_CurrentUserShown, i_NamePressed);
         }
@@ -113,26 +90,20 @@ namespace MyFacebookLogic
             m_WrongGuessObserver = new WrongGuessObserver(i_HandleWrongGuess);
         }
 
-        internal void onGuess(string i_NamePressed)
+        internal void onGuess(string i_NamePressed, Utilities.eGuessType i_UserGuess, string i_MessageToUser)
         {
-            string messageToUser;
-
-            Utilities.eGuessType userGuess = handleNamePressed(i_NamePressed);
-
-            messageToUser = buildMessageAccordingToUserGuess(userGuess);
-
             IObserver observerToInvoke;
 
             //can't do this assignment with macro
-            if (userGuess == Utilities.eGuessType.CORRECT)
+            if (i_UserGuess == Utilities.eGuessType.CORRECT)
                 observerToInvoke = m_CorrectGuessObserver;
             else
                 observerToInvoke = m_WrongGuessObserver;
 
-            observerToInvoke.invoke(messageToUser);
+            observerToInvoke.invoke(i_MessageToUser);
         }
 
-        private string buildMessageAccordingToUserGuess(Utilities.eGuessType i_UserGuess)
+        public string BuildMessageAccordingToUserGuess(Utilities.eGuessType i_UserGuess)
         {
             string messageToBuild;
 
@@ -153,7 +124,7 @@ namespace MyFacebookLogic
                     break;
 
                 default:
-                    //case Utilities.eGuessType.WRONG:
+                    //case Utilities.eGuessType.WRONGג
                     messageToBuild = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
                     break;
             }

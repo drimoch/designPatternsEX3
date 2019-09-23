@@ -89,7 +89,7 @@ namespace MyFacebookLogic
 
         public int CounterLives()
         {
-        return m_GuessWho.m_CounterLives;
+            return m_GuessWho.m_CounterLives;
         }
 
         public void OnWrongGuess()
@@ -107,14 +107,41 @@ namespace MyFacebookLogic
         //    return m_GuessWho.handleNamePressed(i_NamePressed);
         //}
 
-        public void initDelegatesInGuessWho(Action<string> i_HandleCorrectGuess, Action<string> i_HandleWrongGuess)
+        public void InitDelegates(Action<string> i_HandleCorrectGuess, Action<string> i_HandleWrongGuess)
         {
             m_GuessWho.initDelegatesInGuessWho(i_HandleCorrectGuess, i_HandleWrongGuess);
         }
 
-        public void onGuess(string i_NamePressed)
+        public Utilities.eGuessType HandleNamePressed(string i_NamePressed)
         {
-            m_GuessWho.onGuess(i_NamePressed);
+            if (m_GuessWho.IsUserConfirmed(new FirstNameStrategy(), i_NamePressed))
+            {
+                return Utilities.eGuessType.PARTIAL_FIRST_NAME;
+            }
+
+            if (m_GuessWho.IsUserConfirmed(new LastNameStrategy(), i_NamePressed))
+            {
+                return Utilities.eGuessType.PARTIAL_LAST_NAME;
+            }
+
+            if ((m_GuessWho.IsUserConfirmed(new FullNameStrategy(), i_NamePressed)
+                || (string.IsNullOrEmpty(i_NamePressed))))
+            {
+                return Utilities.eGuessType.WRONG;
+            }
+            else
+            {
+                return Utilities.eGuessType.CORRECT;
+            }
         }
-    }      
+
+        public void OnGuess(string i_NamePressed)
+        {
+            Utilities.eGuessType userGuess = HandleNamePressed(i_NamePressed);
+
+            string messageToUser = m_GuessWho.BuildMessageAccordingToUserGuess(userGuess);
+
+            m_GuessWho.onGuess(i_NamePressed, userGuess, messageToUser);
+        }
+    }
 }

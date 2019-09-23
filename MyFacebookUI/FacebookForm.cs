@@ -226,30 +226,9 @@ namespace MyFacebookUI
 
         private void submit_Click(object sender, EventArgs e)
         {
-            //string messageToUser;
-            //string additionalString;
-
             string inputString = submitBox.Text;
 
-            m_AppLogicFacade.onGuess(inputString);
-            //Utilities.eGuessType userGuess = m_NameHandler(inputString);
-
-            //if (m_AppLogicFacade.IsCorrect(userGuess))
-            //{
-            //    messageToUser = string.Format("Correct Guess!{0} Wanna play again?", Environment.NewLine);
-
-            //}
-            //else if (userGuess == Utilities.eGuessType.PARTIAL_FIRST_NAME)
-            //{
-            //    additionalString = string.Format("FirST Name");
-            //}
-
-            //else if (userGuess == Utilities.eGuessType.PARTIAL_FIRST_NAME)
-            //{
-
-            //}
-            //messageToUser = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
-            //m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.WRONG);
+            m_AppLogicFacade.OnGuess(inputString);
         }
 
 
@@ -422,9 +401,7 @@ namespace MyFacebookUI
 
         private void initializeDelegates()
         {
-            //m_NameHandler += m_AppLogicFacade.handleNamePressed;
-
-            m_AppLogicFacade.initDelegatesInGuessWho(handleCorrectGuess, handleWrongGuess);
+            m_AppLogicFacade.InitDelegates(handleCorrectGuess, handleWrongGuess);
         }
     }
 }
