@@ -23,7 +23,10 @@ namespace MyFacebookLogic
             }
         }
 
-      
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return r_Events.GetEnumerator();
+        }
     }
 
 }
