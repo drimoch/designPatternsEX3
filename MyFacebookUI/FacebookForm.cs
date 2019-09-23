@@ -255,11 +255,12 @@ namespace MyFacebookUI
             }
             EventsOnDateListBox.DisplayMember = "Name";
 
-            eventsThatDate =new EventCollection( m_AppLogicFacade.GetEventsOnThatDate(e.Start));
-            EventsOnDateListBox.DisplayMember = "Name";
-            foreach (IEvent eventName in eventsThatDate)
+            eventsThatDate = new EventCollection(m_AppLogicFacade.GetEventsOnThatDate(e.Start));
+
+            IEnumerator<IEvent> eventsThatDateEnumerator = eventsThatDate.GetEnumerator();
+            while (eventsThatDateEnumerator.MoveNext())
             {
-                EventsOnDateListBox.Items.Add(eventName);
+                EventsOnDateListBox.Items.Add(eventsThatDateEnumerator.Current);
             }
         }
 
@@ -293,9 +294,9 @@ namespace MyFacebookUI
                 m_eventIsBeingEdited = true;
                 IEvent selectedEvent = sender as IEvent;
                 Form editEvent = new EditEventForm(selectedEvent, doneEditing);
-                if (selectedEvent!=null)
+                if (selectedEvent != null)
                 {
-                editEvent.Show();
+                    editEvent.Show();
 
                 }
             }
