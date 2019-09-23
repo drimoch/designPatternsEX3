@@ -91,7 +91,7 @@ namespace MyFacebookUI
         private void prepareApplicationAfterLogin()
         {
             exitFromLogin();
-
+           
             m_LoggedInUser = m_LoginResult.LoggedInUser;
             m_AppLogicFacade.SetFeaturesLogic(m_LoggedInUser);
 
@@ -118,7 +118,7 @@ namespace MyFacebookUI
 
         private void checkIfCurrentThreadCreatordAndExecute(Action i_FuncToExecute, FacebookForm i_FacebookForm)
         {
-            if (!i_FacebookForm.InvokeRequired)
+            if(!i_FacebookForm.InvokeRequired)
             {
                 i_FuncToExecute.Invoke();
             }
@@ -396,7 +396,7 @@ namespace MyFacebookUI
         private void initAllForGame()
         {
             new Thread(m_AppLogicFacade.PrepareComponents).Start();
-            initializeLiveImageList();
+           initializeLiveImageList();
         }
 
         private void initializeDelegates()
