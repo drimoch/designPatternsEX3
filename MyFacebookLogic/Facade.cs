@@ -102,19 +102,19 @@ namespace MyFacebookLogic
             return m_GuessWho.CurrentUserShown;
         }
 
-        public Utilities.eGuessType handleNamePressed(string i_NamePressed)
-        {
-            return m_GuessWho.handleNamePressed(i_NamePressed);
-        }
+        //public Utilities.eGuessType handleNamePressed(string i_NamePressed)
+        //{
+        //    return m_GuessWho.handleNamePressed(i_NamePressed);
+        //}
 
         public void initDelegatesInGuessWho(Action<string> i_HandleCorrectGuess, Action<string> i_HandleWrongGuess)
         {
             m_GuessWho.initDelegatesInGuessWho(i_HandleCorrectGuess, i_HandleWrongGuess);
         }
 
-        public void onGuess(string i_MessageToUser, Utilities.eGuessType i_UserGuess)
+        public void onGuess(string i_NamePressed)
         {
-            m_GuessWho.onGuess(i_MessageToUser, i_UserGuess);
+            m_GuessWho.onGuess(i_NamePressed);
         }
     }
 }

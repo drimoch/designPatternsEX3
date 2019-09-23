@@ -12,8 +12,6 @@ namespace MyFacebookUI
 {
     public delegate Utilities.eGuessType NamePressed<T>(T i_NamePressed);
 
-    // public delegate void HandleNamePressed<T>(T i_MessageToUser);
-
     public partial class FacebookForm : Form
     {
         private const string k_LoginTitleBar = " logged in to MyFacebook App";
@@ -29,11 +27,7 @@ namespace MyFacebookUI
         private MyFacbookLogicFacade m_AppLogicFacade;
         private ImageFilter m_ImageFilter;
 
-        public event NamePressed<string> m_NameHandler;
-
-        // public event HandleNamePressed<string> m_CorrectGuess;
-
-        // public event HandleNamePressed<string> m_WrongGuess;
+        //public event NamePressed<string> m_NameHandler;
 
         private void facebookForm_Load(object sender, EventArgs e)
         {
@@ -170,14 +164,6 @@ namespace MyFacebookUI
             }
         }
 
-        //private void onGuess(string i_MessageToUser, HandleNamePressed<string> i_Event)
-        //{
-        //    if (i_Event != null)
-        //    {
-        //        i_Event.Invoke(i_MessageToUser);
-        //    }
-        //}
-
         private void handleWrongGuess(string i_MessageToUser)
         {
             informUserResult(i_MessageToUser);
@@ -240,27 +226,32 @@ namespace MyFacebookUI
 
         private void submit_Click(object sender, EventArgs e)
         {
-            string messageToUser;
+            //string messageToUser;
+            //string additionalString;
 
             string inputString = submitBox.Text;
 
-            Utilities.eGuessType userGuess = m_NameHandler(inputString);
+            m_AppLogicFacade.onGuess(inputString);
+            //Utilities.eGuessType userGuess = m_NameHandler(inputString);
 
-            if (m_AppLogicFacade.IsCorrect(userGuess))
-            {
-                messageToUser = string.Format("Correct Guess!{0} Wanna play again?", Environment.NewLine);
+            //if (m_AppLogicFacade.IsCorrect(userGuess))
+            //{
+            //    messageToUser = string.Format("Correct Guess!{0} Wanna play again?", Environment.NewLine);
 
-                m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.CORRECT);
-                //onGuess(messageToUser, m_CorrectGuess);
-            }
-            else
-            {
-                messageToUser = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
-                m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.WRONG);
+            //}
+            //else if (userGuess == Utilities.eGuessType.PARTIAL_FIRST_NAME)
+            //{
+            //    additionalString = string.Format("FirST Name");
+            //}
 
-                // onGuess(messageToUser, m_WrongGuess);
-            }
+            //else if (userGuess == Utilities.eGuessType.PARTIAL_FIRST_NAME)
+            //{
+
+            //}
+            //messageToUser = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
+            //m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.WRONG);
         }
+
 
         private void logoutbtn_Click(object sender, EventArgs e)
         {
@@ -275,24 +266,22 @@ namespace MyFacebookUI
         private void MonthCalendar_DateSelected(object sender, DateRangeEventArgs e)
         {
             IEnumerable<string> friendsBornInThatDate = new List<string>();
-            EventCollection eventsThatDate;
+            IEnumerable<IEvent> eventsThatDate = new List<EventProxy>();
             birthDayFriendsListBox.Items.Clear();
             EventsOnDateListBox.Items.Clear();
             friendsBornInThatDate = m_AppLogicFacade.GetFriendsWhoBornThatDate(e.Start);
-            EventsOnDateListBox.DisplayMember = "Name";
+
             foreach (string friendName in friendsBornInThatDate)
             {
                 birthDayFriendsListBox.Items.Add(friendName);
             }
 
-            eventsThatDate = new EventCollection(m_AppLogicFacade.GetEventsOnThatDate(e.Start));
-            
-            IEnumerator<IEvent> eventsThatDateEnumerator = eventsThatDate.GetEnumerator();
-            while (eventsThatDateEnumerator.MoveNext())
+            eventsThatDate = m_AppLogicFacade.GetEventsOnThatDate(e.Start);
+            EventsOnDateListBox.DisplayMember = "Name";
+            foreach (IEvent eventName in eventsThatDate)
             {
-                EventsOnDateListBox.Items.Add(eventsThatDateEnumerator.Current);
+                EventsOnDateListBox.Items.Add(eventName);
             }
-        
         }
 
         private void postBtn_Click(object sender, EventArgs e)
@@ -433,11 +422,9 @@ namespace MyFacebookUI
 
         private void initializeDelegates()
         {
-            m_NameHandler += m_AppLogicFacade.handleNamePressed;
+            //m_NameHandler += m_AppLogicFacade.handleNamePressed;
 
             m_AppLogicFacade.initDelegatesInGuessWho(handleCorrectGuess, handleWrongGuess);
-            //m_CorrectGuess = handleCorrectGuess;
-            //m_WrongGuess = handleWrongGuess;
         }
     }
 }
