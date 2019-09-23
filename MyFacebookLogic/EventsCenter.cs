@@ -16,7 +16,7 @@ namespace MyFacebookLogic
 
         public Dictionary<DateTime, List<IEvent>> m_EventsPerDates { get; set; }
 
-        public IEnumerable<IEvent> m_UserEvents { get; set; }
+        public EventCollection m_UserEvents { get; set; }
 
         private List<DateTime> GetFriendsBirthDates()
         {
@@ -69,20 +69,22 @@ namespace MyFacebookLogic
         private List<DateTime> GetAllEventsDates()
         {
             List<DateTime> eventDates = new List<DateTime>();
-            foreach (IEvent evnt in m_UserEvents)
+            IEnumerator<IEvent> userEventsEumerator = m_UserEvents.GetEnumerator();
+            while (userEventsEumerator.MoveNext())
             {
-                if (!(evnt.StartTime == null || evnt.EndTime == null))
+                if (!(userEventsEumerator.Current.StartTime == null || userEventsEumerator.Current.EndTime == null))
                 {
-                    DateTime curDate = evnt.StartTime.Value;
+                    DateTime curDate = userEventsEumerator.Current.StartTime.Value;
 
-                    eventDates.AddRange(GetDateRange(evnt.StartTime.Value, evnt.EndTime.Value));
-                    while (curDate <= evnt.EndTime.Value)
+                    eventDates.AddRange(GetDateRange(userEventsEumerator.Current.StartTime.Value, userEventsEumerator.Current.EndTime.Value));
+                    while (curDate <= userEventsEumerator.Current.EndTime.Value)
                     {
-                        populateDictionary(evnt.Name, curDate, m_EventsPerDates);
+                        populateDictionary(userEventsEumerator.Current, curDate, m_EventsPerDates);
                         curDate = curDate.AddDays(1);
                     }
                 }
             }
+         
 
             return eventDates;
         }
@@ -106,7 +108,7 @@ namespace MyFacebookLogic
             m_FriendsBirthDates = new Dictionary<DateTime, List<string>>();
             m_EventsPerDates = new Dictionary<DateTime, List<IEvent>>();
             m_LoggedInUser = i_LoggedInUser;
-            m_UserEvents = i_LoggedInUser.Events.Select(evnt => new EventProxy(evnt) );
+            m_UserEvents = new EventCollection((ICollection<IEvent>)(from evnt in i_LoggedInUser.Events select new EventProxy(evnt) as IEvent).ToList());
         }
 
         public DateTime[] GetDatesToMark()
@@ -129,7 +131,7 @@ namespace MyFacebookLogic
             return isAnyFriendBornThatDate;
         }
 
-        public bool GetEventsOnThatDate(DateTime i_EventDate, ref IEnumerable<IEvent> i_EventsName)
+        public bool GetEventsOnThatDate(DateTime i_EventDate, ref ICollection<IEvent> i_EventsName)
         {
             bool isAnyEventThatDate = m_EventsPerDates.ContainsKey(i_EventDate);
             if (isAnyEventThatDate)

@@ -244,22 +244,23 @@ namespace MyFacebookUI
 
         private void MonthCalendar_DateSelected(object sender, DateRangeEventArgs e)
         {
-            IEnumerable<string> friendsBornInThatDate = new List<string>();
-            IEnumerable<IEvent> eventsThatDate = new List<EventProxy>();
+            IEnumerable<string> friendsBornInThatDate;
+            EventCollection eventsThatDate;
             birthDayFriendsListBox.Items.Clear();
             EventsOnDateListBox.Items.Clear();
             friendsBornInThatDate = m_AppLogicFacade.GetFriendsWhoBornThatDate(e.Start);
-
             foreach (string friendName in friendsBornInThatDate)
             {
                 birthDayFriendsListBox.Items.Add(friendName);
             }
-
-            eventsThatDate = m_AppLogicFacade.GetEventsOnThatDate(e.Start);
             EventsOnDateListBox.DisplayMember = "Name";
-            foreach (IEvent eventName in eventsThatDate)
+
+            eventsThatDate = new EventCollection(m_AppLogicFacade.GetEventsOnThatDate(e.Start));
+
+            IEnumerator<IEvent> eventsThatDateEnumerator = eventsThatDate.GetEnumerator();
+            while (eventsThatDateEnumerator.MoveNext())
             {
-                EventsOnDateListBox.Items.Add(eventName);
+                EventsOnDateListBox.Items.Add(eventsThatDateEnumerator.Current);
             }
         }
 
@@ -291,9 +292,13 @@ namespace MyFacebookUI
             if (!m_eventIsBeingEdited)
             {
                 m_eventIsBeingEdited = true;
-                IEvent selectedEvent = (IEvent)sender;
+                IEvent selectedEvent = sender as IEvent;
                 Form editEvent = new EditEventForm(selectedEvent, doneEditing);
-                editEvent.Show();
+                if (selectedEvent != null)
+                {
+                    editEvent.Show();
+
+                }
             }
         }
 
