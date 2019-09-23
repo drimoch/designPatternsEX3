@@ -11,7 +11,9 @@ namespace MyFacebookLogic
         public enum eGuessType
         {
             CORRECT = 1,
-            WRONG = 2
+            WRONG = 2,
+            PARTIAL_FIRST_NAME = 3,
+            PARTIAL_LAST_NAME = 4
         }
 
         public enum Constants

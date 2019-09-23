@@ -67,8 +67,16 @@ namespace MyFacebookLogic
 
         public Utilities.eGuessType handleNamePressed(string i_NamePressed)
         {
-            //IStrategy strategy = new FullNameChecker();
-            bool isConfirmed = isUserConfirmed(new FullNameChecker(), i_NamePressed);
+            bool isFirstNameConfirmed = isUserConfirmed(new FirstNameStrategy(), i_NamePressed);
+
+            if (isFirstNameConfirmed)
+                return Utilities.eGuessType.PARTIAL_FIRST_NAME;
+
+            bool isLastNameConfirmed = isUserConfirmed(new LastNameStrategy(), i_NamePressed);
+            if (isLastNameConfirmed)
+                return Utilities.eGuessType.PARTIAL_LAST_NAME;
+
+            bool isConfirmed = isUserConfirmed(new FullNameStrategy(), i_NamePressed);
 
             if ((!isConfirmed) || (string.IsNullOrEmpty(i_NamePressed)))
             {
@@ -105,17 +113,52 @@ namespace MyFacebookLogic
             m_WrongGuessObserver = new WrongGuessObserver(i_HandleWrongGuess);
         }
 
-        internal void onGuess(string i_MessageToUser, Utilities.eGuessType i_UserGuess)
+        internal void onGuess(string i_NamePressed)
         {
+            string messageToUser;
+
+            Utilities.eGuessType userGuess = handleNamePressed(i_NamePressed);
+
+            messageToUser = buildMessageAccordingToUserGuess(userGuess);
+
             IObserver observerToInvoke;
 
             //can't do this assignment with macro
-            if (i_UserGuess == Utilities.eGuessType.CORRECT)
+            if (userGuess == Utilities.eGuessType.CORRECT)
                 observerToInvoke = m_CorrectGuessObserver;
             else
                 observerToInvoke = m_WrongGuessObserver;
 
-            observerToInvoke.invoke(i_MessageToUser);
+            observerToInvoke.invoke(messageToUser);
+        }
+
+        private string buildMessageAccordingToUserGuess(Utilities.eGuessType i_UserGuess)
+        {
+            string messageToBuild;
+
+
+            switch (i_UserGuess)
+            {
+                case Utilities.eGuessType.CORRECT:
+                    messageToBuild = string.Format("Correct Guess!{0} Wanna play again?", Environment.NewLine);
+                    break;
+
+
+                case Utilities.eGuessType.PARTIAL_FIRST_NAME:
+                    messageToBuild = string.Format("Almost, you are close!{0}You guessed correct the first Name", Environment.NewLine);
+                    break;
+
+                case Utilities.eGuessType.PARTIAL_LAST_NAME:
+                    messageToBuild = string.Format("Almost, you are close!{0}You guessed correct the last Name", Environment.NewLine);
+                    break;
+
+                default:
+                    //case Utilities.eGuessType.WRONG:
+                    messageToBuild = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
+                    break;
+            }
+
+            return messageToBuild;
         }
     }
 }

@@ -12,8 +12,6 @@ namespace MyFacebookUI
 {
     public delegate Utilities.eGuessType NamePressed<T>(T i_NamePressed);
 
-   // public delegate void HandleNamePressed<T>(T i_MessageToUser);
-
     public partial class FacebookForm : Form
     {
         private const string k_LoginTitleBar = " logged in to MyFacebook App";
@@ -29,11 +27,7 @@ namespace MyFacebookUI
         private MyFacbookLogicFacade m_AppLogicFacade;
         private ImageFilter m_ImageFilter;
 
-        public event NamePressed<string> m_NameHandler;
-
-       // public event HandleNamePressed<string> m_CorrectGuess;
-
-       // public event HandleNamePressed<string> m_WrongGuess;
+        //public event NamePressed<string> m_NameHandler;
 
         private void facebookForm_Load(object sender, EventArgs e)
         {
@@ -97,7 +91,7 @@ namespace MyFacebookUI
         private void prepareApplicationAfterLogin()
         {
             exitFromLogin();
-           
+
             m_LoggedInUser = m_LoginResult.LoggedInUser;
             m_AppLogicFacade.SetFeaturesLogic(m_LoggedInUser);
 
@@ -124,7 +118,7 @@ namespace MyFacebookUI
 
         private void checkIfCurrentThreadCreatordAndExecute(Action i_FuncToExecute, FacebookForm i_FacebookForm)
         {
-            if(!i_FacebookForm.InvokeRequired)
+            if (!i_FacebookForm.InvokeRequired)
             {
                 i_FuncToExecute.Invoke();
             }
@@ -169,14 +163,6 @@ namespace MyFacebookUI
                 pictureBox.Image = bmp;
             }
         }
-
-        //private void onGuess(string i_MessageToUser, HandleNamePressed<string> i_Event)
-        //{
-        //    if (i_Event != null)
-        //    {
-        //        i_Event.Invoke(i_MessageToUser);
-        //    }
-        //}
 
         private void handleWrongGuess(string i_MessageToUser)
         {
@@ -240,27 +226,32 @@ namespace MyFacebookUI
 
         private void submit_Click(object sender, EventArgs e)
         {
-            string messageToUser;
+            //string messageToUser;
+            //string additionalString;
 
             string inputString = submitBox.Text;
 
-            Utilities.eGuessType userGuess = m_NameHandler(inputString);
+            m_AppLogicFacade.onGuess(inputString);
+            //Utilities.eGuessType userGuess = m_NameHandler(inputString);
 
-            if (m_AppLogicFacade.IsCorrect(userGuess))
-            {
-                messageToUser = string.Format("Correct Guess!{0} Wanna play again?", Environment.NewLine);
+            //if (m_AppLogicFacade.IsCorrect(userGuess))
+            //{
+            //    messageToUser = string.Format("Correct Guess!{0} Wanna play again?", Environment.NewLine);
 
-                m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.CORRECT);
-                //onGuess(messageToUser, m_CorrectGuess);
-            }
-            else
-            {
-                messageToUser = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
-                m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.WRONG);
+            //}
+            //else if (userGuess == Utilities.eGuessType.PARTIAL_FIRST_NAME)
+            //{
+            //    additionalString = string.Format("FirST Name");
+            //}
 
-                // onGuess(messageToUser, m_WrongGuess);
-            }
+            //else if (userGuess == Utilities.eGuessType.PARTIAL_FIRST_NAME)
+            //{
+
+            //}
+            //messageToUser = string.Format("Wrong Guess!{0} Please Try Again!", Environment.NewLine);
+            //m_AppLogicFacade.onGuess(messageToUser, Utilities.eGuessType.WRONG);
         }
+
 
         private void logoutbtn_Click(object sender, EventArgs e)
         {
@@ -426,16 +417,14 @@ namespace MyFacebookUI
         private void initAllForGame()
         {
             new Thread(m_AppLogicFacade.PrepareComponents).Start();
-           initializeLiveImageList();
+            initializeLiveImageList();
         }
 
         private void initializeDelegates()
         {
-            m_NameHandler += m_AppLogicFacade.handleNamePressed;
+            //m_NameHandler += m_AppLogicFacade.handleNamePressed;
 
             m_AppLogicFacade.initDelegatesInGuessWho(handleCorrectGuess, handleWrongGuess);
-            //m_CorrectGuess = handleCorrectGuess;
-            //m_WrongGuess = handleWrongGuess;
         }
     }
 }
