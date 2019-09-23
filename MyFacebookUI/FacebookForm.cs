@@ -12,7 +12,7 @@ namespace MyFacebookUI
 {
     public delegate Utilities.eGuessType NamePressed<T>(T i_NamePressed);
 
-   // public delegate void HandleNamePressed<T>(T i_MessageToUser);
+    // public delegate void HandleNamePressed<T>(T i_MessageToUser);
 
     public partial class FacebookForm : Form
     {
@@ -31,9 +31,9 @@ namespace MyFacebookUI
 
         public event NamePressed<string> m_NameHandler;
 
-       // public event HandleNamePressed<string> m_CorrectGuess;
+        // public event HandleNamePressed<string> m_CorrectGuess;
 
-       // public event HandleNamePressed<string> m_WrongGuess;
+        // public event HandleNamePressed<string> m_WrongGuess;
 
         private void facebookForm_Load(object sender, EventArgs e)
         {
@@ -97,7 +97,7 @@ namespace MyFacebookUI
         private void prepareApplicationAfterLogin()
         {
             exitFromLogin();
-           
+
             m_LoggedInUser = m_LoginResult.LoggedInUser;
             m_AppLogicFacade.SetFeaturesLogic(m_LoggedInUser);
 
@@ -124,7 +124,7 @@ namespace MyFacebookUI
 
         private void checkIfCurrentThreadCreatordAndExecute(Action i_FuncToExecute, FacebookForm i_FacebookForm)
         {
-            if(!i_FacebookForm.InvokeRequired)
+            if (!i_FacebookForm.InvokeRequired)
             {
                 i_FuncToExecute.Invoke();
             }
@@ -275,22 +275,24 @@ namespace MyFacebookUI
         private void MonthCalendar_DateSelected(object sender, DateRangeEventArgs e)
         {
             IEnumerable<string> friendsBornInThatDate = new List<string>();
-            IEnumerable<IEvent> eventsThatDate = new List<EventProxy>();
+            EventCollection eventsThatDate;
             birthDayFriendsListBox.Items.Clear();
             EventsOnDateListBox.Items.Clear();
             friendsBornInThatDate = m_AppLogicFacade.GetFriendsWhoBornThatDate(e.Start);
-
+            EventsOnDateListBox.DisplayMember = "Name";
             foreach (string friendName in friendsBornInThatDate)
             {
                 birthDayFriendsListBox.Items.Add(friendName);
             }
 
-            eventsThatDate = m_AppLogicFacade.GetEventsOnThatDate(e.Start);
-            EventsOnDateListBox.DisplayMember = "Name";
-            foreach (IEvent eventName in eventsThatDate)
+            eventsThatDate = new EventCollection(m_AppLogicFacade.GetEventsOnThatDate(e.Start));
+            
+            IEnumerator<IEvent> eventsThatDateEnumerator = eventsThatDate.GetEnumerator();
+            while (eventsThatDateEnumerator.MoveNext())
             {
-                EventsOnDateListBox.Items.Add(eventName);
+                EventsOnDateListBox.Items.Add(eventsThatDateEnumerator.Current);
             }
+        
         }
 
         private void postBtn_Click(object sender, EventArgs e)
@@ -426,7 +428,7 @@ namespace MyFacebookUI
         private void initAllForGame()
         {
             new Thread(m_AppLogicFacade.PrepareComponents).Start();
-           initializeLiveImageList();
+            initializeLiveImageList();
         }
 
         private void initializeDelegates()
