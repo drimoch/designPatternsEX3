@@ -9,7 +9,7 @@ namespace MyFacebookLogic
     public class EventCollection : IEnumerable
     {
         private readonly ICollection<IEvent> r_Events;
-
+        
         public EventCollection(ICollection<IEvent> i_events)
         {
             r_Events = i_events;
@@ -23,10 +23,7 @@ namespace MyFacebookLogic
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return r_Events.GetEnumerator();
-        }
+      
     }
 
 }
